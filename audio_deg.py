@@ -121,4 +121,4 @@ if __name__ == '__main__':
             for snrz in range(20, 26, 2):
                 add_noise(x, sr, str(noiz), snrz)
         else:
-            conv_impulse(x, sr, str(noiz), 0.6)
+            conv_impulse(x, sr, str(noiz), 0.5)
