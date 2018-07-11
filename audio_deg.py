@@ -104,21 +104,35 @@ def conv_impulse(audio_in, sr, impulse, snr):
 
     librosa.output.write_wav(out, conv_out, sr=sr, norm=False)
 
+def pre_emph(audio, c=0.95):
+    # pre-emphasis on the audio in, where c is the coefficient between 0 and .9
+    # y[n] = x[n] - α*x[n-1]
+    # derivative in discrete time domain 
+    # high value means rapid change i.e. high freq
+    
+    emph_out = np.append(audio[0], audio[1:] - (c * audio[:-1]))
+
+    out = label + '_' + 'pre.wav'
+    librosa.output.write_wav(out, emph_out, sr=sr, norm=False)
+
 
 if __name__ == '__main__':
     x, sr = librosa.core.load(options.wavin, sr=None, mono=False)
 
-    noise = list()
-    if dirwalk==1:
-        files = os.listdir(dirdir)
-        print('yew', files)
-        for entry in files:
-            print(entry)
-            noise.append(entry[:-4]) # should give us every filename without .wav 
+    # noise = list()
+    # if dirwalk==1:
+    #     files = os.listdir(dirdir)
+    #     print('yew', files)
+    #     for entry in files:
+    #         print(entry)
+    #         noise.append(entry[:-4]) # should give us every filename without .wav 
 
-    for noiz in noise:
-        if what_type == 0:
-            for snrz in range(20, 26, 2):
-                add_noise(x, sr, str(noiz), snrz)
-        else:
-            conv_impulse(x, sr, str(noiz), 0.5)
+    # for noiz in noise:
+    #     if what_type == 0:
+    #         for snrz in range(20, 26, 2):
+    #             add_noise(x, sr, str(noiz), snrz)
+    #     else:
+    #         conv_impulse(x, sr, str(noiz), 0.5)
+
+    pre_emph(x)
+    
